@@ -23,7 +23,7 @@ spec:
         - name: linkding
           image: sissbruecker/linkding:1.41.0
           ports:
-            - containerPort: 9090
+            - containerPort: 9200
           volumeMounts:
             - name: linkding-data
               mountPath: "/linkding-data"
