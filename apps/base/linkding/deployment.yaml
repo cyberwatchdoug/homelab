@@ -21,7 +21,7 @@ spec:
             claimName: linkding-pvc
       containers:
         - name: linkding
-          image: sissbruecker/linkding:v1.41.0
+          image: sissbruecker/linkding:1.41.0
           ports:
             - containerPort: 9090
           volumeMounts:
