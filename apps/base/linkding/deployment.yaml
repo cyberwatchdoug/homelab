@@ -20,10 +20,10 @@ spec:
           persistentVolumeClaim:
             claimName: linkding-pvc
       containers:
-        - image: sissbruecker/linkding:v1.41.0
-        name: linkding
-        ports:
-          - containerPort: 9090
-        volumeMounts:
-          - mountPath: "/linkding-data"
-            name: linkding-data
+        - name: linkding
+          image: sissbruecker/linkding:v1.41.0
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: linkding-data
+              mountPath: "/linkding-data"
