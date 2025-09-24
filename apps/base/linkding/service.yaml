@@ -8,4 +8,5 @@ spec:
     app: linkding
   ports:
     - port: 3030
+      targetPort: 9090
   type: ClusterIP
