@@ -8,6 +8,4 @@ spec:
     app: linkding
   ports:
     port: 3030
-  selector:
-    app: linkding
   type: ClusterIP
