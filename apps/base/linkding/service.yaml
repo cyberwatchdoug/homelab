@@ -7,5 +7,5 @@ spec:
   selector:
     app: linkding
   ports:
-    port: 3030
+    - port: 3030
   type: ClusterIP
