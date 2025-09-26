@@ -24,7 +24,10 @@ spec:
                   key: token
                   namespace: cloudflared
         command: ["cloudflared"]
-        args: ["tunnel"
+        args:
+          - "tunnel"
+          - "--config /etc/cloudflared/config/config.yaml"
+          - "run"
         livenessProbe:
           httpGet:
             path: /ready
