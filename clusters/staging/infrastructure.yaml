@@ -12,3 +12,7 @@ spec:
   prune: true
   timeout: 1m
   retryInterval: 1m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
