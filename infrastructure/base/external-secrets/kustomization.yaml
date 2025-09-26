@@ -6,3 +6,4 @@ resources:
   - deployment-crds.yaml
   - release.yaml
   - deployment-crs.yaml
+  - provider-secret.yaml
