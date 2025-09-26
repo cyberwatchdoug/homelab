@@ -16,13 +16,6 @@ spec:
       containers:
         - image: cloudflare/cloudflared:2025.9.1
           name: cloudflared
-          env:
-            - name: TUNNEL_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: tunnel-token
-                  key: token
-                  namespace: cloudflared
         command: ["cloudflared"]
         args:
           - "tunnel"
