@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - repositories.yaml
+  - provider-secret.yaml
   - deployment-crds.yaml
   - release.yaml
   - deployment-crs.yaml
-  - provider-secret.yaml
