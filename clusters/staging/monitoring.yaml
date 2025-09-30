@@ -14,6 +14,7 @@ spec:
   retryInterval: 1m
   dependsOn:
     - name: prometheus-decrypt
+      namespace: flux-system
   decryption:
     provider: sops
     secretRef:
