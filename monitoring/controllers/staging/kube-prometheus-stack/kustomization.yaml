@@ -5,7 +5,7 @@ configMapGenerator:
   - name: kube-prometheus-stack-values
     namespace: monitoring
     files:
-      - values.yaml=kps-values.yaml
+      - values.yaml=kps-values.enc.yaml
     options:
       disableNameSuffixHash: true
 resources:
