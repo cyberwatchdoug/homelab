@@ -1,12 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: monitoring
-configMapGenerator:
-  - name: kube-prometheus-stack-values
-    namespace: monitoring
-    files:
-      - values.yaml=kps-values.enc.yaml
-    options:
-      disableNameSuffixHash: true
 resources:
   - ../../base/kube-prometheus-stack/

@@ -26,6 +26,7 @@ spec:
         target:
           kind: PrometheusRule
   valuesFrom:
+    - secretRef:
+      name: kps-values-secret
     - configMapRef:
-      name: kube-prometheus-stack-values
-      key: values.yaml
+      name: kps-values-general
