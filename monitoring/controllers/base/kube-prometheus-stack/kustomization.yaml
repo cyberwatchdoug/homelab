@@ -6,3 +6,4 @@ resources:
   - kps-values-general.yaml
   - repository.yaml
   - release.yaml
+  - ingress.yaml
