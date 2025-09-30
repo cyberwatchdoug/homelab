@@ -26,7 +26,7 @@ spec:
         target:
           kind: PrometheusRule
   valuesFrom:
-    - secretRef:
-        name: kps-values-secret
-    - configMapRef:
-        name: kps-values-general
+    - kind: Secret
+      name: kps-values-secret
+    - kind: ConfigMap
+      name: kps-values-general
