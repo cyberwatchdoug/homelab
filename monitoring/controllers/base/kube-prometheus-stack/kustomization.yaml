@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: monitoring
 resources:
   - namespace.yaml
+  - kps-values.yaml
   #- repository.yaml
   #- release.yaml
 configMapGenerator:
