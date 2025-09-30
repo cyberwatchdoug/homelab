@@ -3,3 +3,10 @@ kind: Kustomization
 namespace: monitoring
 resources:
   - ../../base/kube-prometheus-stack/
+configMapGenerator:
+  - name: kube-prometheus-stack-values
+    namespace: monitoring
+    files:
+      - values.yaml=kps-values.yaml
+    options:
+      disableNameSuffixHash: true
