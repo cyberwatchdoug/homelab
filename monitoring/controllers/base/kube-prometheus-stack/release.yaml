@@ -28,5 +28,7 @@ spec:
   valuesFrom:
     - secretRef:
       name: kps-values-secret
+      key: values.yaml
     - configMapRef:
       name: kps-values-general
+      key: values.yaml
