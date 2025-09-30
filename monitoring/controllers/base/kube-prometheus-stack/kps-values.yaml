@@ -1,0 +1,109 @@
+# Disable incompatible default components
+grafana:
+    #  defaultDashboardsEnabled: false
+    persistence:
+        enabled: true
+        size: 10Gi
+        # Use your storage class (longhone, nfs-client, local-path)
+        storageClassName: local-path
+#defaultRules:
+#  create: false # Disable default rules that don't work with k3s
+# k3s-specific service monitor configuration
+# Only scrape kubelet to avoid duplicate metrics
+kubelet:
+    enabled: true
+# Disable separate scraping since k3s combines all metrics
+kubeApiServer:
+    enabled: false
+kubeControllerManager:
+    enabled: true
+    endpoints:
+        - ENC[AES256_GCM,data:zQWbUk4cauxwTQ==,iv:8C8XME/IRtPvhUBpmvkXDHR0O4Yh82cH2v+ytPrulLU=,tag:LK9OvOdd77K1mvw4EmlYDg==,type:str]
+    service:
+        enabled: true
+        port: 10257
+        targetPort: 10257
+    serviceMonitor:
+        enabled: true
+        # Enable HTTPS for k3s v1.22+
+        https: true
+        # Skip certificate verification
+        insecureSkipVerify: true
+kubeScheduler:
+    enabled: true
+    endpoints:
+        - ENC[AES256_GCM,data:Mkg19nSujf9JYA==,iv:tPDAbo60cN42N0nhE/hi+72REsg9lgAr9pQECJmp5ng=,tag:irroT+GEMT1r53kVEOvbpg==,type:str]
+    service:
+        enabled: true
+        port: 10259
+        targetPort: 10259
+    serviceMonitor:
+        enabled: true
+        # Enable HTTPS for k3s v1.22+
+        https: true
+        # Skip certificate verification
+        insecureSkipVerify: true
+kubeProxy:
+    enabled: true
+    endpoints:
+        - ENC[AES256_GCM,data:iGBiwSxZfS1eGA==,iv:QUCcvzJ1dhWY0qgqutTGNAN9BbMQ1Qe9RePo06Gt42g=,tag:0I3S8O637XstG8w7lvY/JA==,type:str]
+    service:
+        enabled: true
+        port: 10249
+        targetPort: 10249
+    serviceMonitor:
+        enabled: true
+        https: false
+# Disable etcd if using SQLite (default in k3s)
+kubeEtcd:
+    enabled: false
+# Storage configuration for persistence
+prometheus:
+    prometheusSpec:
+        retention: 5d
+        retentionSize: 5GB
+        storageSpec:
+            volumeClaimTemplate:
+                spec:
+                    # adjust to your setup
+                    storageClassName: local-path
+                    accessModes:
+                        - ReadWriteOnce
+                    resources:
+                        requests:
+                            storage: 20Gi
+        # k3s memory requirements
+        resources:
+            requests:
+                memory: 2500Mi
+                cpu: 500m
+            limits:
+                memory: 4Gi
+                cpu: 2000m
+alertmanager:
+    alertmanagerSpec:
+        storage:
+            volumeClaimTemplate:
+                spec:
+                    # adjust to your setup
+                    storageClassName: local-path
+                    accessModes:
+                        - ReadWriteOnce
+                    resources:
+                        requests:
+                            storage: 10Gi
+sops:
+    age:
+        - recipient: age1rr37fg03cnedhcfvssmsjygcdhks5hetjn2eextlmnw9r6ergglqpze5ed
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAxekE0aUVpcC84R2x6S3Nq
+            RWVvNmlVY294SnQ4MXVQS3pMeWJzZnYwRWdzCll3bGpncjEzT0R5Zm5vK1JJS3kv
+            ckh4dG1UaUxDTThrV2NwK1B0ekRCd1kKLS0tIHpRYW05cnRleGNLRWVONVNWOEc5
+            ZGgrcGEyWCtXMW9HREZKZGNVNlZYWEUK20HJPhutx8elSgPk01rGilLqgYK7WSjv
+            4eKatrrD6RMONnwT4tuRbkY8x1ft2VHaC2PXA8g6KS5ZwfDeoFFgCA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-09-30T03:09:02Z"
+    mac: ENC[AES256_GCM,data:TIKkkBpx5U6nGO6CNV+FcFvBASMfxMGgGLXLzI+/lI/fayA44zPsAGN+sM30kv16fHLeBk9GBE8NyqptL93xBG8kJHk1tEueXVa3QyD4yxuRlGFXAhDaZKEdJwk0HjKoDHc1awx1w8PrsefFoAwYZ1YmnT9KvP3wlmUl2G3Brg8=,iv:p7kpIKcylB+tCCKDaztFjUK3HH/stQXoh0l7JZOSSvQ=,tag:JdLFHDZNkwcB1d1S0peeEA==,type:str]
+    encrypted_regex: ^endpoints$
+    version: 3.10.2
