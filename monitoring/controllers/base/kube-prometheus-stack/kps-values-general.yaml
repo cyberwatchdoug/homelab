@@ -1,0 +1,96 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kps-values-general
+  namespace: monitoring
+data:
+  values.yaml: |
+    # Disable incompatible default components
+    grafana:
+    #  defaultDashboardsEnabled: false
+      persistence:
+        enabled: true
+        size: 10Gi
+        # Use your storage class (longhone, nfs-client, local-path)
+        storageClassName: "local-path"
+
+    #defaultRules:
+    #  create: false # Disable default rules that don't work with k3s
+
+    # k3s-specific service monitor configuration
+    # Only scrape kubelet to avoid duplicate metrics
+    kubelet:
+      enabled: true
+
+    # Disable separate scraping since k3s combines all metrics
+    kubeApiServer:
+      enabled: false
+
+    kubeControllerManager:
+      enabled: true
+      service:
+        enabled: true
+        port: 10257
+        targetPort: 10257
+      serviceMonitor:
+        enabled: true
+        https: true # Enable HTTPS for k3s v1.22+
+        insecureSkipVerify: true # Skip certificate verification
+
+    kubeScheduler:
+      enabled: true
+      service:
+        enabled: true
+        port: 10259
+        targetPort: 10259
+      serviceMonitor:
+        enabled: true
+        https: true # Enable HTTPS for k3s v1.22+
+        insecureSkipVerify: true # Skip certificate verification
+
+    kubeProxy:
+      enabled: true
+      service:
+        enabled: true
+        port: 10249
+        targetPort: 10249
+      serviceMonitor:
+        enabled: true
+        https: false
+
+    # Disable etcd if using SQLite (default in k3s)
+    kubeEtcd:
+      enabled: false
+
+    # Storage configuration for persistence
+    prometheus:
+      prometheusSpec:
+        retention: 5d
+        retentionSize: 5GB
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: "local-path" # adjust to your setup
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 20Gi
+        # k3s memory requirements
+        resources:
+          requests:
+            memory: 2500Mi
+            cpu: 500m
+          limits:
+            memory: 4Gi
+            cpu: 2000m
+
+    alertmanager:
+      alertmanagerSpec:
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: "local-path" # adjust to your setup
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 10Gi

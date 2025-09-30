@@ -3,5 +3,6 @@ kind: Kustomization
 namespace: monitoring
 resources:
   - namespace.yaml
+  - kps-values-general.yaml
   #- repository.yaml
   #- release.yaml
