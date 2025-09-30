@@ -12,9 +12,6 @@ spec:
   prune: true
   timeout: 1m
   retryInterval: 1m
-  dependsOn:
-    - name: prometheus-decrypt
-      namespace: flux-system
   decryption:
     provider: sops
     secretRef:
