@@ -19,6 +19,7 @@ data:
         hosts:
           - grafana.local
         path: /
+        tls: []
 
     #defaultRules:
     #  create: false # Disable default rules that don't work with k3s
