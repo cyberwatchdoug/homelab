@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperless
+  namespace: paperless
+  labels:
+    app: paperless
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: paperless
+  template:
+    metadata:
+      labels:
+        app: paperless
+    spec:
+      securityContext:
+        #runAsUser: xx   # paperless user ID
+        #runAsGroup: xx  # paperless group ID
+        #fsGroup: xx     # paperless group ID
+      volumes:
+        - name: paperless-data
+          persistentVolumeClaim:
+            claimName: paperless-data-pvc
+      containers:
+        - name: paperless
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.18.4
+          ports:
+            - containerPort: 8000
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: paperless-data
+              mountPath:
