@@ -78,7 +78,7 @@ data:
     prometheus:
       prometheusSpec:
         retention: 5d
-        retentionSize: 5GB
+        retentionSize: 1GB
         storageSpec:
           volumeClaimTemplate:
             spec:
@@ -86,14 +86,14 @@ data:
               accessModes: ["ReadWriteOnce"]
               resources:
                 requests:
-                  storage: 20Gi
+                  storage: 10Gi
         # k3s memory requirements
         resources:
           requests:
-            memory: 2500Mi
+            memory: 1Gi
             cpu: 500m
           limits:
-            memory: 4Gi
+            memory: 1.5Gi
             cpu: 2000m
 
     alertmanager:
