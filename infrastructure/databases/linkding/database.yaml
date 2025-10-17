@@ -7,5 +7,21 @@ spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:17.6
   instances: 3
 
+  monitoring:
+    enablePodMonitor: true
+
   storage:
     size: 1Gi
+
+  managed:
+    services:
+      disableDefaultServices:
+        - ro
+        - r
+      additional:
+        selectorType: rw
+        serviceTemplate:
+          metadata:
+            name: linkding-db-lb
+          spec:
+            type: LoadBalancer
