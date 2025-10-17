@@ -19,10 +19,9 @@ spec:
         - ro
         - r
       additional:
-        selectorType:
-          - rw
-        serviceTemplate:
-          metadata:
-            name: linkding-db-lb
-          spec:
-            type: LoadBalancer
+        - selectorType: rw
+          serviceTemplate:
+            metadata:
+              name: linkding-db-lb
+            spec:
+              type: LoadBalancer
