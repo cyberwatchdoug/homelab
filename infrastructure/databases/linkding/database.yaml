@@ -15,11 +15,12 @@ spec:
 
   managed:
     services:
-      disableDefaultServices:
+      disabledDefaultServices:
         - ro
         - r
       additional:
-        selectorType: rw
+        selectorType:
+          - rw
         serviceTemplate:
           metadata:
             name: linkding-db-lb
