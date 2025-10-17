@@ -31,8 +31,21 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
           envFrom:
+            - configMapRef:
+                name: linkding-configmap
             - secretRef:
                 name: linkding-container-env
+          env:
+            - name: LD_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: linkding-db-cnpg-v1-app
+                  key: username
+            - name: LD_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: linkding-db-cnpg-v1-app
+                  key: password
           volumeMounts:
             - name: linkding-data
               mountPath: "/etc/linkding/data"
