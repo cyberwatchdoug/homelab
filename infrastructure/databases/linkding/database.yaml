@@ -13,15 +13,3 @@ spec:
   storage:
     size: 1Gi
 
-  managed:
-    services:
-      disabledDefaultServices:
-        - ro
-        - r
-      additional:
-        - selectorType: rw
-          serviceTemplate:
-            metadata:
-              name: linkding-db-lb
-            spec:
-              type: LoadBalancer
