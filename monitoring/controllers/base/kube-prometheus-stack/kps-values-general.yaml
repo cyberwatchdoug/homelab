@@ -92,8 +92,7 @@ data:
         ingressClassName: traefik
         hosts:
           - prometheus.local
-        paths:
-          - /
+        path: /
         tls: []
 
         # k3s memory requirements
