@@ -87,6 +87,15 @@ data:
               resources:
                 requests:
                   storage: 10Gi
+      ingress:
+        enabled: true
+        ingressClassName: traefik
+        hosts:
+          - prometheus.local
+        paths:
+          - /
+        tls: []
+
         # k3s memory requirements
         resources:
           requests:
