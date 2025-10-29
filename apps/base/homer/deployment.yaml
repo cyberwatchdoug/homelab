@@ -21,7 +21,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: homer
-          image: ghcr.io/b4bz/homer:v25.09.1
+          image: b4bz/homer:v25.09.1
           ports:
             - containerPort: 8080
           securityContext:
