@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homer
+  namespace: homer
+  labels:
+    app: homer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homer
+  template:
+    metadata:
+      labels:
+        app: homer
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: homer
+          image: b4bz/homer:25.09.1
+          ports:
+            - containerPort: 8080
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: homer-data
+              mountPath: /www/assets
+      volumes:
+        - name: homer-data
+          configMap:
+            name: homer-configmap
+            items:
+              - key: config.yaml
+                path: config.yml
