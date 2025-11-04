@@ -1,0 +1,15 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: linkding-db-cnpg-v1
+spec:
+  description: Postgres cluster for Linkding application
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.6
+  instances: 3
+
+  monitoring:
+    enablePodMonitor: true
+
+  storage:
+    size: 1Gi
+
