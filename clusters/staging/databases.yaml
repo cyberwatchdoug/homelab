@@ -8,7 +8,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: "./infrastructure/databases"
+  path: "./infrastructure/databases/staging"
   prune: true
   timeout: 1m
   retryInterval: 1m

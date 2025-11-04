@@ -1,9 +1,9 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: linkding-db-cnpg-v1
+  name: gitea-db-cnpg-v1
 spec:
-  description: Postgres cluster for Linkding application
+  description: Postgres cluster for Gitea application
   imageName: ghcr.io/cloudnative-pg/postgresql:17.6
   instances: 3
 
