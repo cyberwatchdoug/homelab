@@ -1,0 +1,39 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gitea
+  namespace: gitea
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: gitea
+      version: 1.25.0
+      sourceRef:
+        kind: OCIRepository
+        name: gitea
+        namespace: gitea
+  values:
+    image:
+      rootless: true
+    valkey-cluster:
+      enabled: false
+    valkey:
+      enabled: true
+    postgresql:
+      enabled: false
+    postgresql-ha:
+      enabled: false
+
+    externalDatabase:
+      host: gitea-db-cnpg-v1-rw.gitea.svc.cluster.local
+      port: 5432
+      user:
+        secretKeyRef:
+          name: gitea-db-cnpg-v1-app
+          key: username
+      password:
+        secretKeyRef:
+          name: gitea-db-cnpg-v1-app
+          key: password
+      database: gitea

@@ -1,0 +1,8 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: gitea
+  namespace: gitea
+spec:
+  interval: 24h
+  url: oci://docker.gitea.com/charts/gitea
