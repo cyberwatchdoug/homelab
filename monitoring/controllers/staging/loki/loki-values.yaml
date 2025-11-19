@@ -59,7 +59,7 @@ data:
         
         # Ruler configuration (for alerting and recording rules)
         ruler:
-          enable_api:true
+          enable_api: true
           storage:
             type: local
             local:
