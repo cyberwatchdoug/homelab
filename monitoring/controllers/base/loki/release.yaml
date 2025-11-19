@@ -1,0 +1,51 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: loki
+  namespace: monitoring
+spec:
+  interval: 1h
+  timeout: 15m
+
+  chart:
+    spec:
+      chart: loki
+      version: 6.46.0
+      sourceRef:
+        kind: HelmRepository
+        name: loki
+        namespace: monitoring
+      interval: 12h # this defaults to spec.interval value
+  
+  # Reference to values ConfigMap
+  valuesFrom:
+    - kind: ConfigMap
+      name: loki-values
+      valuesKey: values.yaml
+  
+  # Install configuration
+  install:
+    crds: Skip
+    remediation:
+      retries: 3
+
+  # Upgrade configuration
+  upgrade:
+    crds: Skip
+    remediation:
+      retries: 3
+      remediationLastFailure: true
+    cleanupOnFail: true
+  
+  # Rollback configuration
+  rollback:
+    timeout: 10m
+    cleanupOnFail: true
+
+  # Uninstall configuration
+  uninstall:
+    keepHistory: false
+
+  # Post-install test (optional)
+  test:
+    enable: false

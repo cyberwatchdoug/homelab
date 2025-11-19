@@ -16,6 +16,21 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
+  
+  # Health Checks for Loki and Promtail
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: StatefulSet
+      name: loki
+      namespace: monitoring
+    - apiVersion: apps/v1
+      kind: DaemonSet
+      name: promtail
+      namespace: monitoring
+
+  # Wait for resources to be ready
+  wait: true
+  
 ---
 #apiVersion: kustomize.toolkit.fluxcd.io/v1
 #kind: Kustomization

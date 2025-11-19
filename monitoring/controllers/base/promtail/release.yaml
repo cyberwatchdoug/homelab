@@ -1,0 +1,52 @@
+apiVersion: helm.toolkist.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: promtail
+  namespace: monitoring
+spec:
+  interval: 1h
+  timeout: 10m
+
+  # Wait for Loki to be ready first
+  dependsOn:
+    - name: loki
+      namespace: monitoring
+
+  chart:
+    spec:
+      chart: promtail
+      version: 6.17.1
+      sourceRef:
+        kind: HelmRepository
+        name: loki
+        namespace: monitoring
+      interval: 12h # this defaults to spec.interval value
+
+  # Reference to values ConfigMap
+  valuesFrom:
+    - kind: ConfigMap
+      name: promtail-values
+      valuesKey: values.yaml
+
+  # Install configuration
+  install:
+    crds: Skip
+    remediation:
+      retries: 3
+
+  # Upgrade configuration
+  upgrade:
+    crds: Skip
+    remediation:
+      retries: 3
+      remediationLastFailure: true
+    cleanupOnFail: true
+  
+  # Rollback configuration
+  rollback:
+    timeout: 5m
+    cleanupOnFail: true
+
+  # Uninstall configuration
+  uninstall:
+    keepHistory: false

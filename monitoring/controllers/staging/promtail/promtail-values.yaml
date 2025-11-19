@@ -1,0 +1,202 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promtail-values
+  namespace: monitoring
+data:
+  values.yaml: |
+    # Promtail configuration for k3s
+    config:
+      # Loki client configuration
+      clients:
+        - url: http://loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push
+          # Retry configuration
+          backoff_config:
+            max_period: 5m
+            max_retries: 10
+            min_period: 500ms
+          # Batch configuration
+          batchwait: 1s
+          batchsize: 1048576  # 1MB
+          timeout: 10s
+      
+      # Server configuration
+      server:
+        http_listen_port: 3101
+        grpc_listen_port: 0
+      
+      # Positions file (tracks where Promtail left off)
+      positions:
+        filename: /run/promtail/positions.yaml
+      
+      # Scrape configurations
+      scrape_configs:
+        # Job 1: Kubernetes Pod logs
+        - job_name: kubernetes-pods
+          pipeline_stages:
+            # Parse container runtime logs (containerd for k3s)
+            - cri: {}
+            
+            # Extract metadata from log content (optional)
+            - regex:
+                expression: '^(?P<time>\S+) (?P<stream>stdout|stderr) (?P<flags>\S+) (?P<content>.*)$'
+            
+            # Add timestamp
+            - timestamp:
+                source: time
+                format: RFC3339Nano
+            
+            # Extract labels from content (optional - example for JSON logs)
+            # - json:
+            #     expressions:
+            #       level: level
+            #       app: app
+            
+            # Label extraction from parsed fields
+            - labels:
+                stream:
+          
+          # Kubernetes service discovery
+          kubernetes_sd_configs:
+            - role: pod
+          
+          # Relabel configurations - add Kubernetes metadata
+          relabel_configs:
+            # Drop empty pods
+            - source_labels:
+                - __meta_kubernetes_pod_uid
+              action: drop
+              regex: ''
+            
+            # Only scrape running pods
+            - source_labels:
+                - __meta_kubernetes_pod_phase
+              action: keep
+              regex: Running
+            
+            # Add namespace label
+            - source_labels:
+                - __meta_kubernetes_namespace
+              target_label: namespace
+            
+            # Add pod name label
+            - source_labels:
+                - __meta_kubernetes_pod_name
+              target_label: pod
+            
+            # Add container name label
+            - source_labels:
+                - __meta_kubernetes_pod_container_name
+              target_label: container
+            
+            # Add node name label
+            - source_labels:
+                - __meta_kubernetes_pod_node_name
+              target_label: node
+            
+            # Add pod labels as Loki labels
+            - action: labelmap
+              regex: __meta_kubernetes_pod_label_(.+)
+            
+            # Add pod annotations as labels (optional)
+            # - action: labelmap
+            #   regex: __meta_kubernetes_pod_annotation_(.+)
+            
+            # Set file path to read logs from
+            - source_labels:
+                - __meta_kubernetes_pod_uid
+                - __meta_kubernetes_pod_container_name
+              target_label: __path__
+              separator: /
+              replacement: /var/log/pods/*$1/*.log
+        
+        # Job 2: Kubernetes Pod logs with annotation filtering (optional)
+        # Scrape only pods with specific annotation
+        # - job_name: kubernetes-pods-app
+        #   pipeline_stages:
+        #     - cri: {}
+        #   kubernetes_sd_configs:
+        #     - role: pod
+        #   relabel_configs:
+        #     # Keep only pods with annotation "promtail/scrape: true"
+        #     - source_labels:
+        #         - __meta_kubernetes_pod_annotation_promtail_scrape
+        #       action: keep
+        #       regex: true
+        #     # ... rest of relabel_configs same as above
+        
+        # Job 3: System logs from nodes (optional - for k3s system logs)
+        # - job_name: system
+        #   static_configs:
+        #     - targets:
+        #         - localhost
+        #       labels:
+        #         job: k3s-system
+        #         __path__: /var/log/syslog
+    
+    # DaemonSet configuration - runs on all nodes
+    daemonset:
+      enabled: true
+    
+    # Deployment configuration - disabled for k8s log collection
+    deployment:
+      enabled: false
+    
+    # Resource configuration
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 256Mi
+    
+    # ServiceMonitor for Prometheus (optional)
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: kube-prometheus-stack
+    
+    # Pod security context
+    podSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
+    
+    # Container security context
+    containerSecurityContext:
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - ALL
+      allowPrivilegeEscalation: false
+    
+    # Volume mounts - critical for k3s log collection
+    extraVolumes:
+      - name: pods
+        hostPath:
+          path: /var/log/pods
+      - name: containers
+        hostPath:
+          path: /var/lib/rancher/k3s/agent/containerd
+    
+    extraVolumeMounts:
+      - name: pods
+        mountPath: /var/log/pods
+        readOnly: true
+      - name: containers
+        mountPath: /var/lib/rancher/k3s/agent/containerd
+        readOnly: true
+    
+    # Tolerations to run on all nodes including masters
+    tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+    
+    # Update strategy
+    updateStrategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
