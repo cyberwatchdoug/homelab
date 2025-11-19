@@ -39,7 +39,7 @@ spec:
     crds: Skip
     remediation:
       retries: 3
-      remediationLastFailure: true
+      remediateLastFailure: true
     cleanupOnFail: true
   
   # Rollback configuration
