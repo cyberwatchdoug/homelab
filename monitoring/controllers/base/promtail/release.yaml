@@ -26,7 +26,6 @@ spec:
   valuesFrom:
     - kind: ConfigMap
       name: promtail-values
-      valuesKey: values.yaml
 
   # Install configuration
   install:
