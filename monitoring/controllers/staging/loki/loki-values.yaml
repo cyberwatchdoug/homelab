@@ -60,6 +60,8 @@ data:
         retention_enabled: true
         retention_delete_delay: 2h
         retention_delete_worker_count: 150
+        # REQUIRED for Loki 6.x
+        delete_request_store: filesystem
         
       # Ruler configuration (for alerting and recording rules)
       ruler:
