@@ -9,7 +9,7 @@ spec:
 
   chart:
     spec:
-      chart: helm-loki
+      chart: loki
       version: 6.46.0
       sourceRef:
         kind: HelmRepository
