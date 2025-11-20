@@ -20,6 +20,10 @@ data:
       # Storage configuration
       storage:
         type: filesystem
+        bucketNames:
+          chunks: loki-chunks
+          ruler: loki-ruler
+          admin: loki-admin
         filesystem:
           chunks_directory: /var/loki/chunks
           rules_directory: /var/loki/rules
@@ -130,7 +134,7 @@ data:
       
       # Self-monitoring
       selfMonitoring:
-        enabled: true
+        enabled: false
         grafanaAgent:
           installOperator: false
 
