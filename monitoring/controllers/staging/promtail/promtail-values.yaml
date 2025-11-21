@@ -171,23 +171,6 @@ data:
           - ALL
       allowPrivilegeEscalation: false
     
-    # Volume mounts - critical for k3s log collection
-    extraVolumes:
-      - name: pods
-        hostPath:
-          path: /var/log/pods
-      - name: containers
-        hostPath:
-          path: /var/lib/rancher/k3s/agent/containerd
-    
-    extraVolumeMounts:
-      - name: pods
-        mountPath: /var/log/pods
-        readOnly: true
-      - name: containers
-        mountPath: /var/lib/rancher/k3s/agent/containerd
-        readOnly: true
-    
     # Tolerations to run on all nodes including masters
     tolerations:
       - effect: NoSchedule
