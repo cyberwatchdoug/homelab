@@ -14,8 +14,8 @@ spec:
         pod: cloudflared
     spec:
       containers:
-        - image: cloudflare/cloudflared:2025.9.1
-          name: cloudflared
+        - name: cloudflared
+          image: cloudflare/cloudflared:2025.9.1
         command: ["cloudflared"]
         args:
           - "tunnel"
