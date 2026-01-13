@@ -25,7 +25,7 @@ spec:
             claimName: paperless-data-pvc
       containers:
         - name: paperless
-          image: ghcr.io/paperless-ngx/paperless-ngx:2.18.4
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.20.4
           ports:
             - containerPort: 8000
           securityContext:
